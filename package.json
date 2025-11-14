@@ -1,0 +1,24 @@
+{
+  "name": "whistle",
+  "version": "1.0.0",
+  "description": "Anonymous whistleblowing platform with AI moderation",
+  "scripts": {
+    "setup": "npm install --prefix frontend && docker-compose build",
+    "dev": "concurrently \"docker-compose up\" \"npm run dev --prefix frontend\"",
+    "start:backend": "docker-compose up",
+    "start:frontend": "npm run dev --prefix frontend",
+    "stop": "docker-compose down",
+    "logs": "docker-compose logs -f",
+    "clean": "docker-compose down -v && rm -rf frontend/node_modules frontend/.next"
+  },
+  "keywords": [
+    "whistleblowing",
+    "anonymous",
+    "ai-moderation",
+    "nextjs",
+    "microservices",
+    "docker"
+  ],
+  "author": "Claude Code",
+  "license": "MIT"
+}

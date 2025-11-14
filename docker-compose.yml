@@ -1,0 +1,93 @@
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./backend
+      dockerfile: services/api-gateway/Dockerfile
+    container_name: whistle-api-gateway
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - USER_SERVICE_URL=http://user-service:4001
+      - POST_SERVICE_URL=http://post-service:4002
+      - CHAT_SERVICE_URL=http://chat-service:4004
+      - MEDIA_SERVICE_URL=http://media-service:4005
+    depends_on:
+      - user-service
+      - post-service
+      - chat-service
+      - media-service
+    networks:
+      - whistle-network
+
+  # User Service
+  user-service:
+    build:
+      context: ./backend
+      dockerfile: services/user-service/Dockerfile
+    container_name: whistle-user-service
+    restart: always
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - MONGODB_URI=mongodb+srv://strider:strider123%3F%3F@ct.l2yrumi.mongodb.net/whistle?retryWrites=true&w=majority&appName=ct
+    networks:
+      - whistle-network
+
+  # Post Service
+  post-service:
+    build:
+      context: ./backend
+      dockerfile: services/post-service/Dockerfile
+    container_name: whistle-post-service
+    restart: always
+    ports:
+      - "4002:4002"
+    environment:
+      - PORT=4002
+      - MONGODB_URI=mongodb+srv://strider:strider123%3F%3F@ct.l2yrumi.mongodb.net/whistle?retryWrites=true&w=majority&appName=ct
+    networks:
+      - whistle-network
+
+  # Chat Service
+  chat-service:
+    build:
+      context: ./backend
+      dockerfile: services/chat-service/Dockerfile
+    container_name: whistle-chat-service
+    restart: always
+    ports:
+      - "4004:4004"
+    environment:
+      - PORT=4004
+      - MONGODB_URI=mongodb+srv://strider:strider123%3F%3F@ct.l2yrumi.mongodb.net/whistle?retryWrites=true&w=majority&appName=ct
+      - FRONTEND_URL=http://localhost:3000
+    networks:
+      - whistle-network
+
+  # Media Service
+  media-service:
+    build:
+      context: ./backend
+      dockerfile: services/media-service/Dockerfile
+    container_name: whistle-media-service
+    restart: always
+    ports:
+      - "4005:4005"
+    environment:
+      - PORT=4005
+    volumes:
+      - media-uploads:/app/uploads
+    networks:
+      - whistle-network
+
+networks:
+  whistle-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+  media-uploads:
