@@ -33,6 +33,7 @@ lerna-debug.log*
 *.swo
 *~
 .DS_Store
+.claude/
 
 # Docker
 docker-compose.override.yml
